@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Aplicativo Orange Box para dispositivos Android para controlar robôs de até 4 eixos, controlando velocidade e enviando comandos diversos.">
+    <title>Orange Box - Android App</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <header>
+        <nav class="header-menu">
+            <a href="index.html">Principal</a>
+            <a href="project.html">Projetos</a>
+            <a href="about.html">Sobre</a>
+            <a href="contact.html">Contato</a>
+        </nav>
+    </header>
+
+    <main class="conteudo">
+        <section class="conteudo-principal">
+            <h1>Aplicativo Orange Box</h1>
+            <h3>Comunicação entre o Arduino e o aplicativo Android através da conectividade Bluetooth.</h3>
+        </section>
+
+        <div class="botao-voltar">
+            <a href="project.html"><button>Voltar</button></a>
+        </div>
+
+        <section class="conteudo-principal-texto">
+            <p>Aplicação para dispositivos móveis como smartphones e tablets, desenvolvida através do Android Studio
+                durante o trabalho de conclusão de curso
+                dos alunos Richard Ribeiro e Gilberto Ribeiro, formandos em Engenharia Elétrica e Engenharia de Controle
+                e Automação. Nomeado como Orange Box, o aplicativo possui a capacidade de comunicar através do Bluetooth
+                com um microcontrolador, neste caso o Arduino com o módulo Bluetooth HC-05. Durante o desenvolvimento do
+                trabalho
+                foram implementadas diversas funções e em sua versão final o aplicativo é capaz de:
+                <br></br>
+            </p>
+
+            <div class="space-ul-li-p">
+                <ul>
+                    <li>
+                        <p>Estabeler a conexão com o dispositivo desejado.</p>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <p>Enviar comandos diversos para serem configurados e utilizados pelo microcontrolador.</p>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <p>Comandar 4 eixos separadamente com a resolução de 1º, em um range de 0º a 180.</p>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <p>Controlar a velocidade de movimento dos eixos, em um range de 1 a 25.</p>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <p>Capacidade para controlar até 9 eixos (de acordo com o padrão de comunicação criado).</p>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="text-img">
+                <div class="img-logo">
+                    <img src="./img/applogo.png" alt="Orange Box Logo">
+                </div>
+                <p>Logo do aplicativo Orange Box</p>
+
+                <div class="img-app">
+                    <img src="./img/app.png" alt="Orange Box App">
+                </div>
+                <p>Interface do aplicativo Orange Box</p>
+            </div>
+
+            <div class="text-img">
+                <div class="img-autosize">
+                    <img src="./img/appgif.gif" alt="Orange Box Code">
+                </div>
+                <p>Gif do aplicativo em uso.</p>
+            </div>
+
+            <h3>Padrão de comunicação</h3>
+            <p> Para realizar a comunicação entre o aplicativo móvel e o microcontrolador e para atender
+                os requisitos e demandas do projeto, foi criado um padrão de transmissão das strings de comando.
+                Este padrão está descrito abaixo: <br>
+                <br>
+                Padrão - <strong>String</strong> formada por 4 caracteres <br>
+                <br>
+                <strong>Padrão de dados para comando de servos</strong><br>
+                Primeiro caractere - <strong>número do eixo</strong> - Range: 0 a 9<br>
+
+                Segundo, terceiro e quarto caractere - <strong>formação da posição</strong> - Range: 0 a 180<br>
+                <br>
+                Exemplo:<br>
+                <strong>String data</strong> = "3152"<br>
+                <strong>Servo:</strong> 3 <br>
+                <strong>Posição</strong>: 152<br>
+                <br>
+
+                <strong>Transmissão de dados para seleção de velocidade</strong><br>
+                Primeiro caractere - <strong>identificador</strong> - Padrão: <strong>s</strong> <br>
+                Segundo, terceiro e quarto caractere - <strong>Formação da velocidade</strong> - Range: 1 a 25<br>
+                <br>
+                Exemplo:<br>
+                <strong>String speed </strong>= "s015"<br>
+                <strong>Identificador</strong>: s<br>
+                <strong>Velocidade</strong>: 015<br>
+                <br>
+
+                <strong>Transmissão de comandos</strong><br>
+                Qualquer string de 4 palavras que não corresponda com os modos de transmissão anteriores.<br>
+                <br>
+                Exemplo: <br>
+                <strong>String comando</strong> = "play"<br>
+                <strong>String comando</strong> = "stop"<br>
+                <strong>String comando</strong> = "usen"<br>
+                <strong>String comando</strong> = "usdi"<br>
+                <strong>String comando</strong> = "home"<br>
+                <br>
+            </p>
+
+            <h4>Envio da string de 4 caracteres padrão</h4>
+
+            <div class="text-img">
+                <div class="img-autosize">
+                    <img src="./img/appcode.png" alt="Orange Box Code">
+                </div>
+                <p>Estrutura de código do aplicativo para montar a string de comando do servo 1.</p>
+            </div>
+
+            <h3>Código para estruturar a string de 4 caracteres padrão no microcontrolador</h3>
+
+            <p>
+                Este bloco de código é executado sempre que houver bytes disponíveis para leitura
+                no buffer do Bluetooth.
+            </p>
+
+            <div class="text-code">
+                <p>
+                    if (bluetooth.available()) {<br>
+                    for (int i = 0; i < 4; i++) {<br>
+                        delay(1);<br>
+                        Data[i] = bluetooth.read();<br>
+                        dataString += Data[i];<br>
+                        delay(1);<br>
+                        }<br>
+                </p>
+            </div>
+
+            <p>
+                Depois de montada a string padrão, ela é verificada para os devidos comandos. O código abaixo
+                é a tratativa para comandar o servo 1 na posição desejada.
+            </p>
+
+            <div class="text-code">
+                <p>
+                    if (Data[0] == '1') {<br>
+                        positionString = dataString.substring(1, 4);<br>
+                        servoPosition = positionString.toInt();<br>
+                        servoPosition = map(servoPosition, 0, 180, 544, 2400);<br>
+                        pwm.writeMicroseconds(0, servoPosition);<br>
+                      }<br>
+                </p>
+            </div>
+
+            <h3>Trabalho de conclusão de curso</h3>
+
+            <p>Como parte do desenvolvimento do trabalho de conclusão de curso e para apresentação do trabalho
+                foi montado uma planta com duas esteiras, um <a href="roboticarm.html">braço robótico</a> e o controlador. 
+                Desta forma, com este protótipo montado o aplicativo era capaz de controlar o braço robótico para manipular
+                objetos que vinham da esteira de entrada.
+            </p>
+
+            <div class="text-img">
+                <div class="img-autosize">
+                    <img src="./img/prototipo.png" alt="prototipo">
+                </div>
+                <p>Protótipo montado para a apresentação do trabalho.</p>
+            </div>
+
+            <h3>Referências, links, arquivos e outros</h3>
+            <p>Clique em cima de cada link para abrir:</p>
+            <div class="text-links">
+                <div class="space-ul-li-p">
+                    <ul>
+                        <li>
+                            <p class="ul-li-p"><a href="https://drive.google.com/file/d/1ehBU6XtPpuPMxNwVkHZsvO2684I4vY3Y/view?usp=sharing" target="_blank" rel="noopener noreferrer">Código do microcontrolador Arduino</a></p>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <p class="ul-li-p"><a href="#">Orange Box.apk</a></p>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <p class="ul-li-p"><a href="https://drive.google.com/file/d/11E9ywojXJPHYWKUhMg5vrWv40_PaB5xx/view?usp=sharing" target="_blank" rel="noopener noreferrer">Trabalho de Conclusão de Curso - Richard Ribeiro e Gilberto Ribeiro</a></p>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <p class="ul-li-p"><a href="roboticarm.html" target="_blank" rel="noopener noreferrer">Projeto Braço Robótico EEZYbotARM MK2</a></p>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <p class="ul-li-p"><a href="https://www.thingiverse.com/thing:1454048" target="_blank" rel="noopener noreferrer">Braço Robótico EEZYbotARM MK2 - Thingiverse</a></p>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <p class="ul-li-p"><a href="https://www.thingiverse.com/thing:2720579" target="_blank" rel="noopener noreferrer">Esteira transportadora - Thingiverse</a></p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="botao-topo">
+                <a href="#"><button>Ir para o topo</button></a>
+            </div>
+
+        </section>
+    </main>
+
+        <footer>
+            <a href="https://github.com/richardribeiro1" target="_blank" rel="noopener norefeer">
+                <img src="./img/github.svg"></img>
+                <p>GitHub</p>
+            </a>
+            <a href="https://linkedin.com/in/richard-ribeiro1" target="_blank" rel="noopener norefeer">
+                <img src="./img/linkedin.svg"></img>
+                <p>Linkedin</p>
+            </a>
+        </footer>
+</body>
+
+</html>

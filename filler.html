@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enchedora</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <header>
+        <nav class="header-menu">
+            <a href="index.html">Principal</a>
+            <a href="project.html">Projetos</a>
+            <a href="about.html">Sobre</a>
+            <a href="contact.html">Contato</a>
+        </nav>
+    </header>
+
+    <main class="conteudo">
+        <section class="conteudo-principal">
+            <h1>Enchedora com Arduino e sensor de fluxo YF-S201</h1>
+            <h3>Projeto de enchedora programável através de display LCD utilizando Arduino e sensor de fluxo YF-S201
+            </h3>
+        </section>
+
+        <div class="botao-voltar">
+            <a href="project.html"><button>Voltar</button></a>
+        </div>
+
+        <section class="conteudo-principal-texto">
+            <p>
+                Este projeto foi desenvolvido pelos alunos Emerson Viana, Felipe Patrick e Richard Ribeiro
+                para a disciplina Tópicos Especiais II do curso de engenharia elétrica da Newton Paiva.
+                A ideia do projeto foi desenvolver um projeto microcontrolado para o controle de envase de líquidos
+                em recipientes. Para agilizarmos o desenvolvimento do projeto, criamos o fluxograma do processo para
+                auxiliar no desenvolvimento do código de controle.<br>
+                <br>
+            </p>
+
+            <div class="text-img">
+                <div class="img-autosize">
+                    <img src="./img/fluxogramafiller.png">
+                </div>
+                <p>Fluxograma do processo de funcionamento.</p>
+            </div>
+
+            <p>Para testarmos o funcionamento em ambiente simulado, utilizamos o Tinkercad para a montagem
+                do circuito e simulamos o funcionamento.
+            </p>
+
+            <div class="text-img">
+                <div class="img-autosize">
+                    <img src="./img/schematic.png" alt="Circuito no Tinkercad">
+                </div>
+                <p>Circuito montado no Tinkercad.</p>
+            </div>
+
+            <p></p>
+
+            <div class="text-img">
+                <div class="img-autosize">
+                    <img src="./img/arduinoyfs201.png" alt="Arduino e sensor de fluxo">
+                </div>
+                <p>Arduino e o sensor de fluxo YF-S201.</p>
+            </div>
+
+            <p>Visando um projeto programável, onde o usuário tem a opção de programar a quantidade desejada para envase,
+                foi adicionado o LCD Keypad Shield para o Arduino, onde temos um display LCD e 5 botões para uso. Desta
+                forma o usuário consegue definir a quantidade e dar o comando para inciar o procedimento de envase.
+            </p>
+            <div class="text-img">
+                <div class="img-autosize">
+                    <img src="./img/lcd.jpg">
+                </div>
+                <p>Display de LCD.</p>
+            </div>
+
+            <h3>Prototipagem</h3>
+
+            <p>O desenvolvimento do projeto foi além e foi desenvolvido todo o projeto eletrônico para criarmos uma placa
+                própria utilizando a plataforma EasyEDA. A partir do esquema eletrônico foi gerado o PCB.
+            </p>
+
+            <div class="text-img">
+                <div class="img-autosize">
+                    <img src="./img/schematicpng.png">
+                </div>
+                <p>Diagrama esquemático.</p>
+            </div>
+
+            <div class="text-img">
+                <div class="img-autosize">
+                    <img src="./img/pcb.svg">
+                </div>
+                <p>PCB.</p>
+            </div>
+
+            <div class="text-img">
+                <div class="img-autosize">
+                    <img src="./img/pcb3d.png">
+                </div>
+                <p>PCB 3D.</p>
+            </div>
+
+            <h3>Código</h3>
+            <p>O código principal se resume em habilitar e desabilitar a interrupção durante um tempo para amostrar o número de pulsos
+                gerados pelo sensor de fluxo YF-S201. Foram realizados diversos testes e um número satisfatório foram 40 amostras
+                por segundo. Realizamos as conversões para calcularmos a vazão instantânea e assim ir acumulando.
+            </p>
+
+            <div class="text-code">
+                <p>
+                    while (vazaoAcc < quantidade && envase){ <br>
+                        digitalWrite (valvulaEnchimento, HIGH); <br>
+                        sei(); // Habilita interrupção do método impulso <br>
+                        delay (25); // Delay de 25 milisegundos - tempo de amostra - 40 amostras por segundo <br>
+                        cli(); // Desabilita interrupção de método impulso <br>
+                        <br>
+                        vazao = (frequencia*40)/(8.143); //(L/min) <br>
+                        miliLitros = (vazao*1000); //Convertendo L/min para ml/min <br>
+                        mlSeg = (miliLitros/60); //Convertendo a vazão de ml/min para ml/s <br>
+                        vazaoInstantaneo = (mlSeg)/40; //Adequando o resultado da vazão em ml/s em função da taxa de
+                        amostragem <br>
+                        vazaoAcc += vazaoInstantaneo); //Acumulando a vazão <br>
+                        frequencia = 0; //Reset da leitura de frequência <br>
+                        <br>
+                        lcd.setCursor(0,1); <br>
+                        lcd.println(vazaoAcc); //Imprimindo no display a vazão acumulada do atual enchimento <br>
+                        }
+                </p>
+            </div>
+
+            <h3>Resultados</h3>
+            <p>Considerando o erro do sensor, as variações de cada teste, os resultados mensurados
+                e adquiridos pelo Arduino e o sensor de fluxo, o resultado foi satisfatório e com baixa variação, obtendo
+            uma precisão elevada com um sensor de baixo custo.</p>
+
+            <div class="text-img">
+                <div class="img-autosize">
+                    <img src="./img/yfs201.png">
+                </div>
+                <p>Dados amostrados durante os teste.</p>
+            </div>
+            <h3>Referências, links, arquivos e outros</h3>
+            <p>Clique em cima de cada link para abrir:</p>
+            <div class="text-links">
+                <div class="space-ul-li-p">
+                    <ul>
+                        <li>
+                            <p class="ul-li-p"><a href="./img/schematic.svg" target="_blank" rel="noopener noreferrer">Diagrama esquemático eletrônico</a></p>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <p class="ul-li-p"><a href="https://github.com/adafruit/Adafruit-Flow-Meter" target="_blank" rel="noopener noreferrer">Adafruit Flow Meter</a></p>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <p class="ul-li-p"><a href="https://www.hobbytronics.co.uk/datasheets/sensors/YF-S201.pdf" target="_blank" rel="noopener noreferrer">Sensor YF-S201</a></p>
+                        </li>
+                    </ul>                
+                </div>
+            </div>
+
+
+
+            <div class="botao-topo">
+                <a href="#"><button>Ir para o topo</button></a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <a href="https://github.com/richardribeiro1" target="_blank" rel="noopener norefeer">
+            <img src="./img/github.svg"></img>
+            <p>GitHub</p>
+        </a>
+        <a href="https://linkedin.com/in/richard-ribeiro1" target="_blank" rel="noopener norefeer">
+            <img src="./img/linkedin.svg"></img>
+            <p>Linkedin</p>
+        </a>
+    </footer>
+</body>
+
+</html>

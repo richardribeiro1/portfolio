@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZaraBot + ESP8266 NodeMCU</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <header>
+        <nav class="header-menu">
+            <a href="index.html">Principal</a>
+            <a href="project.html">Projetos</a>
+            <a href="about.html">Sobre</a>
+            <a href="contact.html">Contato</a>
+        </nav>
+    </header>
+
+    <main class="conteudo">
+        <section class="conteudo-principal">
+            <h1>ZaraBot - Alimentador para Pet's com ESP8266 e Telegram Bot</h1>
+            <h3>ESP8266 + Telegram Bot</h3>
+        </section>
+
+        <div class="botao-voltar">
+            <a href="project.html"><button>Voltar</button></a>
+        </div>
+
+        <section class="conteudo-principal-texto">
+            <p>
+                Minha cachorra chamada Zarabatana, Zarinha, como é carinhosamente chamada, fica aos cuidados dos meus
+                pais. Porém quando eles viajam ela fica sozinha,
+                sem ninguém para cuidar e para não incomodar os outros, este projeto surgiu desta necessidade. A ideia
+                foi criar um alimentador que funcionasse sempre
+                na mesma hora do dia e que fizesse uma dosagem adequada de ração, nem mais e nem menos. A ideia desde o
+                início foi ir além e utilizar um ESP8266
+                e aproveitar da sua conexão via Wi-Fi para executar comandos, configurações e diagnósticos.
+            </p>
+
+            <p><br>
+                Procurando por projetos semelhantes na internet e buscando por atribuir mais funcionalidades ao projeto,
+                me deparei com uma biblioteca que fornece
+                uma interface com a API Telegram Bot. A partir desta biblioteca, eu teria uma interface de conversação
+                direta com meu ESP8266, onde implementei
+                comandos para definir a hora e o minuto em que o alimentador iria funcionar, definir a duração do tempo
+                de funcionamento, enviar comandos para acionamento manual,
+                e receber mensagens de diagnósticos e estados. Aproveitando a impressora 3D, foi impresso o projeto de
+                um alimentador disponibilizado no Thingiverse.
+            </p>
+
+            <div class="text-img">
+                <div class="img-small">
+                    <img src="./img/telegram.png" alt="Telegram Logo">
+                </div>
+                <p>Telegram App</p>
+            </div>
+
+            <h3>Resultado</h3>
+            <p>Realizado impressão das peças, a montagem do alimentador, a programação e os testes, está aqui o
+                resultado.</p>
+
+            <div class="text-img">
+                <div class="img-autosize">
+                    <img src="./img/telegrambot.png" alt="Telegram Logo">
+                </div>
+                <p>ZarinhaBot no Telegram</p>
+            </div>
+
+            <p>Além da utilização comum para o acionamento das GPIO do ESP8266, implementei um esquema de LED's de
+                indicação
+                para conexão a internet, comunicação ativa com o Bot do Telegram, acionamento do alimentador e
+                acionamento manual.
+                Em caso de perda de conexão com a internet, uma rotina irá controlar o devido acionamento por horário.
+            </p>
+
+            <p><br>Durante os testes, foram verificados alguns problemas. Se a rotina do Telegram Bot para realizar
+                comandos, verificação e diagnósticos pela internet
+                estiver buscando por mensagens o tempo todo, o tempo de ciclo do ESP8266 fica alto, variando entre 8 a
+                12 segundos.
+                A solução paleativa para este problema foi adicionar um botão para habilitar ou não a rotina de busca de
+                mensagens.
+                Foi adicionado um botão para acionamento manual.
+                Outro ponto é quando o ESP8266 está conectado a internet, o controle de tempo é feito atualizando o
+                relógio.
+                Quando offline é feito pelo temporizador interno e ocorre uma pequena dessincronização do relógio.
+            </p>
+
+            <div class="text-code">
+                <p>
+                    void getMessages() {<br>
+                    int numNewMessages = bot.getUpdates(bot.last_message_received + 1);<br>
+                    while (numNewMessages) {<br>
+                    digitalWrite(ledRunning, HIGH);<br>
+                    handleNewMessages(numNewMessages);<br>
+                    numNewMessages = bot.getUpdates(bot.last_message_received + 1);<br>
+                    }<br>
+                    digitalWrite(ledRunning, LOW);<br>
+                    }<br>
+                    <br>
+                    Função quando executada eleva o tempo de ciclo para 8-12 segundos.
+                </p>
+            </div>
+
+            <div class="text-img">
+                <div class="img-autosize">
+                    <img src="./img/zarabotinho.jpg" alt="Zarabotinho">
+                </div>
+                <p>Teste do alimentador</p>
+            </div>
+
+            <h3>Referências, links, arquivos e outros</h3>
+            <p>Clique em cima de cada link para abrir:</p>
+            <div class="text-links">
+                <div class="space-ul-li-p">
+                    <ul>
+                        <li>
+                            <p class="ul-li-p"><a
+                                    href="https://randomnerdtutorials.com/telegram-control-esp32-esp8266-nodemcu-outputs/">Tutorial
+                                    Random Nerd</a></p>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <p class="ul-li-p"><a
+                                    href="https://github.com/witnessmenow/Universal-Arduino-Telegram-Bot">Universal
+                                    Telegram Bot Library</a></p>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <p class="ul-li-p"><a href="https://core.telegram.org/bots/api">Telegram Bot API</a></p>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <p class="ul-li-p"><a
+                                    href="https://github.com/witnessmenow/Universal-Arduino-Telegram-Bot/blob/master/examples/ESP8266/FlashLED/FlashLED.ino">Código
+                                    do Telegram Bot</a></p>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <p class="ul-li-p"><a href="https://www.thingiverse.com/thing:4255428">Projeto do
+                                    alimentador - Thingiverse</a></p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="botao-topo">
+                <a href="#"><button>Ir para o topo</button></a>
+            </div>
+        </section>
+    </main>
+
+
+    <footer>
+        <a href="https://github.com/richardribeiro1" target="_blank" rel="noopener norefeer">
+            <img src="./img/github.svg"></img>
+            <p>GitHub</p>
+        </a>
+        <a href="https://linkedin.com/in/richard-ribeiro1" target="_blank" rel="noopener norefeer">
+            <img src="./img/linkedin.svg"></img>
+            <p>Linkedin</p>
+        </a>
+    </footer>
+</body>
+
+</html>

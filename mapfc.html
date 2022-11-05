@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Projetos eletrônicos utilizando o ESP8266 e Arduino Uno. Projetos de aplicativos móveis Android.">
+    <title>Richard's Portifolio</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+
+    <header>
+        <nav class="header-menu">
+            <a href="index.html">Principal</a>
+            <a href="project.html">Projetos</a>
+            <a href="about.html">Sobre</a>
+            <a href="contact.html">Contato</a>
+        </nav>
+    </header>
+
+    <main class="conteudo">
+        <section class="conteudo-principal">
+            <h1>Map FC</h1>
+        </section>
+
+        <div class="botao-voltar">
+            <a href="project.html"><button>Voltar</button></a>
+        </div>
+
+        <section class="conteudo-principal-texto">
+            <p>
+                Quando estamos trabalhando com diferentes escalas e precisamos constantemente fazer conversões,
+                utilizamos algumas funções matemáticas
+                para realizar tais conversões. Em um ambiente de trabalho, quando estamos de frente para um equipamento,
+                não temos tanto tempo
+                para executarmos tais conversões. Com o intuito de facilitar tais conversões para otimizar a programação
+                e a manutenção a aplicação MapFC foi
+                desenvolvida. De maneira simples e rápida se tornou simples mapear um valor dentro de outra escala.</p>
+
+            <p><br>
+                Imagine que durante a manutenção de um equipamento, você precise verificar se o sensor de temperatura
+                está enviando o sinal corretamente
+                e se está chegando e sendo lido corretamente este sinal no CLP.
+                Vamos utilizar um sensor IFM TN2531, que possui faixa de medição de -40 a 150 ºC e sua saída analógica
+                envia um sinal de 4 a 20mA.
+            </p>
+
+
+            <div class="text-img">
+                <div class="img-great">
+                    <img src="./img/tn2531.png" alt="Sensor de temperatura IFM TN2531">
+                </div>
+                <p>Sensor de temperatura IFM TN2531.</p>
+            </div>
+
+
+            <p><br>Significa que se o sensor estiver mandando um sinal de 4 mA, a temperatura lida é de -40 ºC e se
+                estiver enviando um sinal de 20mA
+                certamente uma temperatura de 150ºC. Mas e quando o sinal for 17,5 mA?
+            </p>
+
+            <p><br>
+                Desta forma o MapFC calcula facilmente o valor desejado.
+            </p>
+
+            <div class="text-img">
+                <div class="img-autosize">
+                    <img src="./img/mapfc.png" alt="MapFC aplicativo Windows">
+                </div>
+                <p>Mapeando o valor de 17,5 mA para a escala de temperatura.</p>
+            </div>
+
+            <p>Basta inserir o valor desejado para mapeamento no campo "Valor". A escala se refere a escala que o valor
+                desejado
+                se encontra, neste caso em mA. A escala 2 se refere a qual escala estaremos mapeando este valor, neste
+                caso em ºC.
+                Inserimos os valores de início e fim em cada escala. Em mA o início é 4 mA e o fim em 20 mA. E na escala
+                de temperatura
+                é o range do próprio sensor, iniciando em -40 ºC e finalizando em 150 ºC.
+            </p>
+
+            <p><br>
+                Mapeando este valor, temos o resultado que indica que 17,5 mA é equivalente a 118,75ºC. Lembre-se que no
+                seu CLP
+                este valor pode ser um pouco diferente devido a resolução do conversor analógico-digital. Para dúvidas
+                e conhecer mais sobre resolução de conversores A/D, confira este tópico onde foi desenvolvido uma
+                aplicação para calcularmos a resolução <a href="#">neste link</a>.
+
+            </p>
+
+            <p> <br>E para uma temperatura de 22 ºC qual o sinal de corrente deve chegar no CLP?</p>
+
+            <div class="text-img">
+                <div class="img-autosize">
+                    <img src="./img/mapfc2.png" alt="MapFC aplicativo Windows">
+                </div>
+                <p>Mapeando a temperatura para a escala de corrente.</p>
+            </div>
+
+            <p><br>Inserindo os valores inicias das escalas e o valor desejado,
+                temos o resultado mapeado de 9,6 mA para uma temperatura de 22 ºC.
+                Desta forma fica fácil para um técnico verificar o correto funcionamento do sensor e do sinal que está chegando ao CLP.
+                Estes foram apenas alguns exemplos, mas podemos mapear valores em diversas ocasiões.
+            </p>
+
+            <h3>Visual Studio 2022</h3>
+            <p>Esta aplicação foi desenvolvida utilizando o Visual Studio Community 2022, utilizando C# como linguagem
+                de programação.
+                Um código bastante simples, porém inseridos algumas precauções para a aplicação não dar crash como visto
+                na imagem abaixo.
+            </p>
+
+            <div class="text-img">
+                <div class="img-autosize">
+                    <img src="./img/mapfc_vsc.png" alt="MapFC no Visual Studio">
+                </div>
+                <p>Código principal da aplicação.</p>
+            </div>
+
+            <h3>Função map() no Arduino</h3>
+
+            <p>No Arduino a função map() é muito utlizada para mapear valores. Na utilização de
+                microservos temos a opção de utilizar a função write() que aceita valores entre 0 e 180º.
+                A função writeMicroseconds() aceita valores entre 544 a 2400, onde o nível de precisão do movimento
+                do microservo é muito maior. Desta forma é necessário mapear os valores conforme o código abaixo.
+            </p>
+
+            <div class="text-code">
+                <p>
+                    servoPosition = positionString.toInt(); <br>
+                    servoPosition = map(servoPosition, 0, 180, 544, 2400);<br>
+                    pwm.writeMicroseconds(3, servoPosition);<br>
+                </p>
+            </div>
+
+            <h3>Referências, links, arquivos e outros</h3>
+            <p>Clique em cima de cada link para abrir:</p>
+            <div class="text-links">
+                <div class="space-ul-li-p">
+                    <ul>
+                        <li>
+                            <p class="ul-li-p"><a
+                                    href="https://drive.google.com/file/d/1x_sWA_Iq0Vh9Zmi6ko7Nkfck_SU4dw71/view?usp=sharing" target="_blank" rel="noopener noreferrer">MapFC
+                                    - Executável</a></p>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <p class="ul-li-p"><a
+                                    href="https://www.arduino.cc/reference/en/language/functions/math/map/" target="_blank" rel="noopener noreferrer">map() -
+                                    Referência Arduino</a></p>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <p class="ul-li-p"><a
+                                    href="https://www.ifm.com/restservices/br/pt/assets/c3VwcGxpZXJzL2lmbS9kb2N1bWVudHMvcHJvZHVjdC9UTjI1MzEtMDAvZGF0ZW5ibGFldHRlci9UTjI1MzEtMDBfRU4tVVMucGRm" target="_blank" rel="noopener noreferrer">Datasheet IFM TN2531</a></p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="botao-topo">
+                <a href="#"><button>Ir para o topo</button></a>
+            </div>
+
+        </section>
+    </main>
+
+    <footer>
+        <a href="https://github.com/richardribeiro1" target="_blank" rel="noopener norefeer">
+            <img src="./img/github.svg"></img>
+            <p>GitHub</p>
+        </a>
+        <a href="https://linkedin.com/in/richard-ribeiro1" target="_blank" rel="noopener norefeer">
+            <img src="./img/linkedin.svg"></img>
+            <p>Linkedin</p>
+        </a>
+    </footer>
+</body>
+
+</html>
